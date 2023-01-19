@@ -1,13 +1,13 @@
-package com.aochensoft.gradledemo;
+package com.example.demobackstage;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class GradleDemoApplication {
+public class DemoBackstageApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(GradleDemoApplication.class, args);
+        SpringApplication.run(DemoBackstageApplication.class, args);
     }
 
 }

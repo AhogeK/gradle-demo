@@ -1,10 +1,10 @@
-package com.aochensoft.gradledemo;
+package com.example.demobackstage;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class GradleDemoApplicationTests {
+class DemoBackstageApplicationTests {
 
     @Test
     void contextLoads() {
