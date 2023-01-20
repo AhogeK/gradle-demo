@@ -1,2 +1,3 @@
 rootProject.name = 'gradle-demo'
 include 'demo-backstage'
+include 'demo-common'

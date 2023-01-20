@@ -19,6 +19,7 @@ repositories {
 }
 
 dependencies {
+    implementation project(":demo-common")
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
