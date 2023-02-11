@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLDeleteAll;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
@@ -23,7 +22,6 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @SQLDelete(sql = "UPDATE sys_user SET is_deleted = 1 WHERE id = ?")
-@SQLDeleteAll(sql = "UPDATE sys_user SET is_deleted = 1 WHERE id in ?")
 @Where(clause = "is_deleted = 0")
 public class SysUser {
     @Id
