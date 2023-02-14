@@ -3,6 +3,7 @@ spring:
     url: jdbc:mysql://localhost:3306/gradle_demo?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8&rewriteBatchedStatements=true
     username: root
     password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     open-in-view: true
     properties:
@@ -10,3 +11,8 @@ spring:
         persistence:
           sharedCache:
             mode: UNSPECIFIED
+      hibernate:
+        format_sql: true
+    show-sql: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
