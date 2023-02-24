@@ -12,7 +12,6 @@ configurations {
 
 dependencies {
     implementation project(":demo-common")
-    implementation 'org.springframework.boot:spring-boot-starter-web'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

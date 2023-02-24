@@ -1,3 +1,5 @@
+reflector:
+  trace: true
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/gradle_demo?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8&rewriteBatchedStatements=true
@@ -16,3 +18,10 @@ spring:
     show-sql: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+    # only if we include the trace param in the URL (?trace=true), we'll get a stack trace in the response payload.
+    include-stacktrace: on_param
+    include-exception: false

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication(scanBasePackages = {"com.aochensoft"})
 @EntityScan(basePackages = {"com.aochensoft.democommon.entity"})
-@EnableJpaRepositories(basePackages = {"com.aochensoft.democommon.dao"})
+@EnableJpaRepositories(basePackages = {"com.aochensoft.democommon.repository"})
 public class DemoBackstageApplication {
 
     public static void main(String[] args) {
