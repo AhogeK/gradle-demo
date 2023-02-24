@@ -32,6 +32,19 @@ public class ErrorResponse {
         errors.add(new ValidationError(field, message));
     }
 
+    /**
+     * <a href="https://www.baeldung.com/java-record-keyword">Java 14 Record Keyword</a>
+     * same as
+     * {@code
+     *
+     * @Getter
+     * @Setter
+     * @RequiredArgsConstructor private static class ValidationError {
+     * private final String field;
+     * private final String message;
+     * }
+     * }
+     */
     @Getter
     @Setter
     @RequiredArgsConstructor
