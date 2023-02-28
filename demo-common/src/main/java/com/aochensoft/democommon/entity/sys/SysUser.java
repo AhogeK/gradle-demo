@@ -21,9 +21,9 @@ import java.util.List;
  */
 @Getter
 @Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @SQLDelete(sql = "UPDATE sys_user SET is_deleted = 1 WHERE id = ?")
 @Where(clause = "is_deleted = 0")
@@ -33,52 +33,110 @@ public class SysUser implements UserDetails {
     @GeneratedValue(generator = "custom_gen")
     private Long id;
 
+    /**
+     * 用户名称
+     */
     private String username;
 
+    /**
+     * 密码
+     */
     private String password;
 
+    /**
+     * 头像
+     */
     private String avatar;
 
+    /**
+     * 电子邮箱
+     */
     private String email;
 
+    /**
+     * 手机号码
+     */
     private String mobileNum;
 
+    /**
+     * 性别
+     */
     private Byte gender;
 
+    /**
+     * 最后登录时间
+     */
     private LocalDateTime lastLoginTime;
 
+    /**
+     * 创建时间
+     */
     @Column(insertable = false, updatable = false)
     private LocalDateTime createTime;
 
+    /**
+     * 更新时间
+     */
     @Column(insertable = false, updatable = false)
     private LocalDateTime updateTime;
 
+    /**
+     * 是否删除
+     */
     private Byte isDeleted = 0;
 
+    /**
+     * 角色
+     */
     @Transient
     @Enumerated(EnumType.STRING)
     private SysRole role = SysRole.USER;
 
+    /**
+     * 获取权限
+     *
+     * @return 权限
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
+    /**
+     * 账户是否未过期
+     *
+     * @return true
+     */
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    /**
+     * 账户是否未锁定
+     *
+     * @return true
+     */
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    /**
+     * 密码是否未过期
+     *
+     * @return true
+     */
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    /**
+     * 是否可用
+     *
+     * @return true
+     */
     @Override
     public boolean isEnabled() {
         return true;

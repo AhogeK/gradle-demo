@@ -1,8 +1,8 @@
 package com.aochensoft.demobackstage;
 
 import cn.hutool.core.util.IdUtil;
-import com.aochensoft.democommon.dao.sys.SysUserDAO;
 import com.aochensoft.democommon.entity.sys.SysUser;
+import com.aochensoft.democommon.repository.sys.SysUserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Order;
@@ -17,7 +17,7 @@ import java.util.Optional;
 class DemoBackstageApplicationTests {
 
     @Autowired
-    private SysUserDAO sysUserDAO;
+    private SysUserRepository sysUserRepository;
 
     private static Long insertId;
 
@@ -28,7 +28,7 @@ class DemoBackstageApplicationTests {
         insert.setUsername("AhogeK");
         insert.setPassword(IdUtil.fastSimpleUUID());
         Assertions.assertDoesNotThrow(() -> {
-            sysUserDAO.save(insert);
+            sysUserRepository.save(insert);
         });
         insertId = insert.getId();
     }
@@ -38,8 +38,8 @@ class DemoBackstageApplicationTests {
     void softDelUserTest() {
         log.info("Check insert ID: {}", insertId);
         Assertions.assertNotNull(insertId);
-        sysUserDAO.deleteById(insertId);
-        Optional<SysUser> entity = sysUserDAO.findById(insertId);
+        sysUserRepository.deleteById(insertId);
+        Optional<SysUser> entity = sysUserRepository.findById(insertId);
         Assertions.assertFalse(entity.isPresent());
     }
 }

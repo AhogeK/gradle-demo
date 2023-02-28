@@ -4,6 +4,7 @@ plugins {
 
 group = 'com.aochensoft'
 version = '0.0.1-SNAPSHOT'
+
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
@@ -13,6 +14,10 @@ repositories {
     mavenCentral()
 }
 
+compileJava {
+    // https://stackoverflow.com/questions/44067477/drawbacks-of-javac-parameters-flag
+    options.compilerArgs << '-parameters'
+}
 
 dependencies {
     implementation libs.spring.boot.jpa

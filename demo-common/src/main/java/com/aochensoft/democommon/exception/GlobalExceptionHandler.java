@@ -1,6 +1,7 @@
 package com.aochensoft.democommon.exception;
 
 
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,8 +9,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -63,6 +62,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /**
+     * 翱晨公共异常拦截
+     *
+     * @param exception 异常
+     * @param request   web 请求
+     * @return 失败响应
+     */
+    @ExceptionHandler(AochenGlobalException.class)
+    public ResponseEntity<Object> handleAochenGlobalException(AochenGlobalException exception, WebRequest request) {
+        log.error("翱晨公共异常", exception);
+        return buildErrorResponse(exception, exception.getMessage(), HttpStatus.valueOf(exception.getStatus()), request);
+    }
+
+    /**
      * 异常响应构造函数
      *
      * @param exception  异常
@@ -110,7 +122,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleExceptionInternal(@NonNull Exception ex, @Nullable Object body,
+    protected ResponseEntity<Object> handleExceptionInternal(@NonNull Exception ex, Object body,
                                                              @NonNull HttpHeaders headers,
                                                              @NonNull HttpStatusCode statusCode,
                                                              @NonNull WebRequest request) {
