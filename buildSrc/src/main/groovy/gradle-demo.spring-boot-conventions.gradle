@@ -20,23 +20,14 @@ compileJava {
 }
 
 dependencies {
-    implementation libs.spring.boot.jpa
-    implementation libs.spring.boot.jdbc
-    implementation libs.spring.boot.web
-    implementation libs.spring.boot.validation
-    implementation libs.hutool.all
-    implementation libs.spring.boot.starter.security
-    implementation libs.java.jwt
-    implementation libs.commons.lang3
-    runtimeOnly libs.mysql
+    runtimeOnly "mysql:mysql-connector-java:${mysqlVersion}"
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-    compileOnly libs.lombok
-    annotationProcessor libs.lombok
-
-    testCompileOnly libs.lombok
-    testAnnotationProcessor libs.lombok
-    testImplementation libs.jupiter.api
-    testRuntimeOnly libs.jupiter.engine
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${jupiterVersion}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${jupiterVersion}"
 }
 
 test {
