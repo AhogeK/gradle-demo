@@ -1,10 +1,10 @@
 package com.aochensoft.democommon.exception;
 
 
+import com.aochensoft.democommon.config.CustomReflectorProperties;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -30,8 +30,11 @@ import java.util.Objects;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public static final String TRACE = "trace";
 
-    @Value("${reflector.trace:false}")
-    private boolean printStackTrace;
+    private final CustomReflectorProperties customReflectorProperties;
+
+    public GlobalExceptionHandler(CustomReflectorProperties customReflectorProperties) {
+        this.customReflectorProperties = customReflectorProperties;
+    }
 
     @Override
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
@@ -102,7 +105,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                       HttpStatusCode httpStatus,
                                                       WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse(httpStatus.value(), message);
-        if (printStackTrace && isTraceOn(request)) {
+        if (customReflectorProperties.isTrace() && isTraceOn(request)) {
             errorResponse.setStackTrace(ExceptionUtils.getStackTrace(exception));
         }
         return ResponseEntity.status(httpStatus).body(errorResponse);

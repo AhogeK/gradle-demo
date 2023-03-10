@@ -3,12 +3,6 @@ plugins {
     id 'gradle-demo.spring-boot-conventions'
 }
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
 dependencies {
     api "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
     api "org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}"
@@ -18,5 +12,4 @@ dependencies {
     api "com.auth0:java-jwt:${javaJwtVersion}"
     api "cn.hutool:hutool-all:${hutoolVersion}"
     api "org.apache.commons:commons-lang3:${commonsLang3Version}"
-    api "mysql:mysql-connector-java:${mysqlVersion}"
 }
