@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -47,7 +48,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
             errorResponse.addValidationError(fieldError.getField(), fieldError.getDefaultMessage());
         }
+        if (customReflectorProperties.isTrace() && isTraceOn(request)) {
+            errorResponse.setStackTrace(ExceptionUtils.getStackTrace(ex));
+        }
         return ResponseEntity.unprocessableEntity().body(errorResponse);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(
+            @NonNull HttpMessageNotReadableException ex, @NonNull HttpHeaders headers,
+            @NonNull HttpStatusCode status, @NonNull WebRequest request
+    ) {
+        return buildErrorResponse(ex, "接受请求体失败，请确认请求体。", HttpStatus.UNPROCESSABLE_ENTITY, request);
     }
 
     /**
