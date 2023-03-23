@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -59,7 +60,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             @NonNull HttpMessageNotReadableException ex, @NonNull HttpHeaders headers,
             @NonNull HttpStatusCode status, @NonNull WebRequest request
     ) {
-        return buildErrorResponse(ex, "接受请求体失败，请确认请求体。", HttpStatus.UNPROCESSABLE_ENTITY, request);
+        return buildErrorResponse(ex, "接收请求体失败，请确认请求体。", HttpStatus.UNPROCESSABLE_ENTITY, request);
+    }
+
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+    public ResponseEntity<Object> handleHttpMediaTypeNotSupportedException(
+            HttpMediaTypeNotSupportedException ex, WebRequest request) {
+        return buildErrorResponse(ex, "不支持的媒体类型，请确认请求体格式。", HttpStatus.UNSUPPORTED_MEDIA_TYPE, request);
     }
 
     /**
