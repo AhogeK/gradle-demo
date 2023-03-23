@@ -68,7 +68,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                                      @NonNull HttpHeaders headers,
                                                                      @NonNull HttpStatusCode status,
                                                                      @NonNull WebRequest request) {
-        return buildErrorResponse(ex, "不支持的媒体类型，请确认请求体格式。",
+        return buildErrorResponse(ex, "不支持的媒体类型，请确认请求体格式: " + ex.getContentType(),
                 HttpStatus.UNSUPPORTED_MEDIA_TYPE, request);
     }
 
