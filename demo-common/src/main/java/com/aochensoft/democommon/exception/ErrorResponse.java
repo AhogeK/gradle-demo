@@ -1,7 +1,5 @@
 package com.aochensoft.democommon.exception;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
@@ -19,12 +17,9 @@ import java.util.Objects;
  */
 @Getter
 @Setter
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorResponse {
     private final int status;
     private final String message;
-    // customizing timestamp serialization format
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private final LocalDateTime timestamp;
     private String stackTrace;
     private List<ValidationError> errors;
