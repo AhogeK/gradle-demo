@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -88,9 +89,13 @@ public class SysUser implements UserDetails {
     /**
      * 角色
      */
-    @Transient
-    @Enumerated(EnumType.STRING)
-    private SysRole role = SysRole.USER;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "sys_user_role",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")}
+    )
+    private List<SysRole> roles;
 
     /**
      * 获取权限
@@ -99,7 +104,12 @@ public class SysUser implements UserDetails {
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        // 将每个角色转换为SimpleGrantedAuthority对象，并添加到集合中
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (SysRole role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getCode()));
+        }
+        return authorities;
     }
 
     /**

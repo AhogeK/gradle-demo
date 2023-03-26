@@ -34,4 +34,10 @@ public class AochenGlobalException extends RuntimeException {
         this.status = status;
         this.message = message;
     }
+
+    public AochenGlobalException(HttpStatus status, String message) {
+        super(message);
+        this.status = status.value();
+        this.message = message;
+    }
 }

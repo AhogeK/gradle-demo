@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.naming.AuthenticationException;
 import java.util.Objects;
 
 /**
@@ -37,6 +38,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public GlobalExceptionHandler(CustomReflectorProperties customReflectorProperties) {
         this.customReflectorProperties = customReflectorProperties;
     }
+
 
     @Override
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
@@ -97,6 +99,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleAochenGlobalException(AochenGlobalException exception, WebRequest request) {
         log.error("翱晨公共异常", exception);
         return buildErrorResponse(exception, exception.getMessage(), HttpStatus.valueOf(exception.getStatus()), request);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<Object> handleAuthenticationException(AuthenticationException exception, WebRequest request) {
+        log.error("认证异常", exception);
+        return buildErrorResponse(exception, exception.getMessage(), HttpStatus.UNAUTHORIZED, request);
     }
 
     /**

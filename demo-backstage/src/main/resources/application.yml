@@ -1,6 +1,11 @@
 spring:
-  config:
-    import: classpath:custom.yml
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+  security:
+    user:
+      name: admin
+      password: ahogek-gradle-demo
   datasource:
     url: jdbc:mysql://localhost:3306/gradle_demo?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8&rewriteBatchedStatements=true
     username: root
@@ -25,3 +30,11 @@ server:
     # only if we include the trace param in the URL (?trace=true), we'll get a stack trace in the response payload.
     include-stacktrace: on_param
     include-exception: false
+
+# 错误响应体是否展示异常栈
+reflector:
+  trace: true
+
+app:
+  jwtSecret: 'YW9jaGVuOmdyYWRsZS1kZW1v'
+  jwtExpirationMs: 86400000

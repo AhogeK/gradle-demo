@@ -12,4 +12,5 @@ dependencies {
     api "com.auth0:java-jwt:${javaJwtVersion}"
     api "cn.hutool:hutool-all:${hutoolVersion}"
     api "org.apache.commons:commons-lang3:${commonsLang3Version}"
+    api 'com.auth0:java-jwt:4.3.0'
 }

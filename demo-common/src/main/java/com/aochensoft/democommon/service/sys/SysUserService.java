@@ -1,5 +1,7 @@
 package com.aochensoft.democommon.service.sys;
 
+import com.aochensoft.democommon.dto.auth.SignUpRequest;
+import com.aochensoft.democommon.entity.sys.SysUser;
 import com.aochensoft.democommon.request.sys.SysUserCreateRequest;
 
 /**
@@ -17,4 +19,19 @@ public interface SysUserService {
      * @return 用户ID
      */
     Long createSysUser(SysUserCreateRequest sysUserCreateRequest);
+
+    /**
+     * 根据用户ID加载用户
+     *
+     * @param userId 用户ID
+     * @return 用户实体
+     */
+    SysUser loadUserById(Long userId);
+
+    /**
+     * 注册用户
+     *
+     * @param signUpRequest 注册信息
+     */
+    void registerUser(SignUpRequest signUpRequest);
 }
