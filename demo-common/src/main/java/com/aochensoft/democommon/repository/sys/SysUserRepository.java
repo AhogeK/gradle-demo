@@ -28,4 +28,13 @@ public interface SysUserRepository extends CrudRepository<SysUser, Long> {
      * @return 用户
      */
     Optional<SysUser> findByUsername(String username);
+
+    /**
+     * 根据用户名或邮箱查询用户
+     *
+     * @param username 用户名
+     * @param email    邮箱
+     * @return 用户
+     */
+    Optional<SysUser> findByUsernameOrEmail(String username, String email);
 }

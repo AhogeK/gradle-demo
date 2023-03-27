@@ -1,8 +1,10 @@
 package com.aochensoft.democommon.service.sys;
 
+import com.aochensoft.democommon.dto.auth.SignInRequest;
 import com.aochensoft.democommon.dto.auth.SignUpRequest;
 import com.aochensoft.democommon.entity.sys.SysUser;
-import com.aochensoft.democommon.request.sys.SysUserCreateRequest;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * 系统用户服务层
@@ -11,14 +13,6 @@ import com.aochensoft.democommon.request.sys.SysUserCreateRequest;
  * @since 2023-02-15 10:25:42
  */
 public interface SysUserService {
-
-    /**
-     * 创建系统用户
-     *
-     * @param sysUserCreateRequest 系统用户创建请求实体
-     * @return 用户ID
-     */
-    Long createSysUser(SysUserCreateRequest sysUserCreateRequest);
 
     /**
      * 根据用户ID加载用户
@@ -34,4 +28,19 @@ public interface SysUserService {
      * @param signUpRequest 注册信息
      */
     void registerUser(SignUpRequest signUpRequest);
+
+    /**
+     * 登录
+     *
+     * @param signInRequest 登录请求实体
+     */
+    void signIn(SignInRequest signInRequest, HttpServletRequest request, HttpServletResponse response);
+
+    /**
+     * 通过用户名或密码查询用户
+     *
+     * @param username 用户名
+     * @return 用户实体
+     */
+    SysUser findUserByUsernameOrEmail(String username);
 }

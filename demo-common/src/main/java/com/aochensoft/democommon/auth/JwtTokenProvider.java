@@ -5,6 +5,7 @@ import com.aochensoft.democommon.exception.AochenGlobalException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.*;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -19,6 +20,7 @@ import java.time.ZoneId;
  * @author AhogeK ahogek@gmail.com
  * @since 2023-03-24 10:52:51
  */
+@Getter
 @Component
 public class JwtTokenProvider {
     @Value("${app.jwtSecret}")

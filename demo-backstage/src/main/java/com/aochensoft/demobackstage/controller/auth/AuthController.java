@@ -1,7 +1,10 @@
 package com.aochensoft.demobackstage.controller.auth;
 
+import com.aochensoft.democommon.dto.auth.SignInRequest;
 import com.aochensoft.democommon.dto.auth.SignUpRequest;
 import com.aochensoft.democommon.service.sys.SysUserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +37,21 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<Void> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         userService.registerUser(signUpRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 用户登录
+     *
+     * @param signInRequest 登录表单信息
+     * @param request       请求
+     * @param response      响应
+     * @return 登录结果
+     */
+    @PostMapping("/signin")
+    public ResponseEntity<Void> signIn(@Valid @RequestBody SignInRequest signInRequest, HttpServletRequest request,
+                                       HttpServletResponse response) {
+        userService.signIn(signInRequest, request, response);
         return ResponseEntity.ok().build();
     }
 }
