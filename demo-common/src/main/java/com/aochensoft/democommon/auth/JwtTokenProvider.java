@@ -13,12 +13,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * JWT TOKEN 提供者
@@ -64,7 +64,7 @@ public class JwtTokenProvider {
     }
 
     /**
-     * 通过 JWT 获取用户信息
+     * 通过 token 获取用户信息
      *
      * @param token JWT TOKEN
      * @return 用户信息
@@ -74,8 +74,15 @@ public class JwtTokenProvider {
         return redisService.get(RedisPrefixEnum.JWT_TOKEN.getPrefix() + userId, LoginUser.class);
     }
 
-    public List<GrantedAuthority> getGrantedAuthorities(String jwt) {
-        return redisService.getList(RedisPrefixEnum.USER_AUTHORITY.getPrefix() + jwt, GrantedAuthority.class);
+    /**
+     * 通过 token 获取用户权限
+     *
+     * @param token JWT TOKEN
+     * @return 用户权限
+     */
+    public Collection<SimpleGrantedAuthority> getGrantedAuthorities(String token) {
+        Long userId = getUserIdFromJWT(token);
+        return redisService.getList(RedisPrefixEnum.USER_AUTHORITY.getPrefix() + userId, SimpleGrantedAuthority.class);
     }
 
     /**

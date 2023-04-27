@@ -30,6 +30,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -62,7 +63,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 if (CharSequenceUtil.hasLetter(jwt) && jwtTokenProvider.validateToken(jwt)) {
                     // 获取登录用户
                     LoginUser loginUser = jwtTokenProvider.getLoginUserFromJWT(jwt);
-                    List<GrantedAuthority> authorities = jwtTokenProvider.getGrantedAuthorities(jwt);
+                    Collection<? extends GrantedAuthority> authorities = jwtTokenProvider.getGrantedAuthorities(jwt);
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(loginUser, null, authorities);
                     authentication.setDetails(loginUser);
