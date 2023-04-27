@@ -1,11 +1,14 @@
 package com.aochensoft.democommon.auth;
 
+import com.aochensoft.democommon.constant.RedisPrefixEnum;
 import com.aochensoft.democommon.entity.sys.SysUser;
 import com.aochensoft.democommon.exception.AochenGlobalException;
+import com.aochensoft.democommon.service.cache.RedisService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.*;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -21,8 +24,11 @@ import java.time.ZoneId;
  * @since 2023-03-24 10:52:51
  */
 @Getter
+@RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
+
+    private final RedisService redisService;
 
     @Value("${app.jwtSecret}")
     private String jwtSecret;
@@ -45,6 +51,16 @@ public class JwtTokenProvider {
         Algorithm algorithm = Algorithm.HMAC512(jwtSecret);
         return JWT.create().withIssuer("AhogeK").withSubject(userPrincipal.getId().toString())
                 .withExpiresAt(expiryDate.atZone(ZoneId.systemDefault()).toInstant()).sign(algorithm);
+    }
+
+    /**
+     * 通过 JWT 获取用户信息
+     *
+     * @param token JWT TOKEN
+     * @return 用户信息
+     */
+    public SysUser getLoginUserFromJWT(String token) {
+        return redisService.get(RedisPrefixEnum.JWT_TOKEN.getPrefix() + token, SysUser.class);
     }
 
     /**
@@ -82,4 +98,5 @@ public class JwtTokenProvider {
             throw new AochenGlobalException(HttpStatus.UNAUTHORIZED, "认证失败");
         }
     }
+
 }

@@ -48,6 +48,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (requiresAuthentication(request)) {
             String jwt = getJwtFromRequest(request);
             if (CharSequenceUtil.hasLetter(jwt) && jwtTokenProvider.validateToken(jwt)) {
+                // 获取登录用户
+                SysUser loginUser = jwtTokenProvider.getLoginUserFromJWT(jwt);
                 Long userId = jwtTokenProvider.getUserIdFromJWT(jwt);
                 SysUser user = userService.loadUserById(userId);
                 UsernamePasswordAuthenticationToken authentication =

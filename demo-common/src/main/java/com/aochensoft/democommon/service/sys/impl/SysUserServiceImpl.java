@@ -17,7 +17,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Pattern;
@@ -37,18 +36,14 @@ public class SysUserServiceImpl implements SysUserService {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    private final CsrfTokenRepository csrfTokenRepository;
-
     private final AuthenticationManager authenticationManager;
 
     @Autowired
     public SysUserServiceImpl(SysUserRepository sysUserRepository, PasswordEncoder passwordEncoder,
-                              JwtTokenProvider jwtTokenProvider, CsrfTokenRepository csrfTokenRepository,
-                              AuthenticationManager authenticationManager) {
+                              JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager) {
         this.sysUserRepository = sysUserRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
-        this.csrfTokenRepository = csrfTokenRepository;
         this.authenticationManager = authenticationManager;
     }
 
@@ -103,14 +98,6 @@ public class SysUserServiceImpl implements SysUserService {
         jwtCookie.setMaxAge(jwtTokenProvider.getJwtExpirationMs() / 1000);
         jwtCookie.setPath("/");
         response.addCookie(jwtCookie);
-        // 设置CSRF令牌
-        var csrfToken = csrfTokenRepository.generateToken(request);
-        var csrfCookie = new Cookie(csrfToken.getHeaderName(), csrfToken.getToken());
-        csrfCookie.setHttpOnly(true);
-        csrfCookie.setMaxAge(jwtTokenProvider.getJwtExpirationMs() / 1000);
-        csrfCookie.setPath("/");
-        csrfCookie.setSecure(true);
-        response.addCookie(csrfCookie);
     }
 
     @Override

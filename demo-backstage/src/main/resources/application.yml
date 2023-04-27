@@ -23,6 +23,11 @@ spring:
     show-sql: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      database: 0
 server:
   error:
     include-message: always
@@ -30,7 +35,6 @@ server:
     # only if we include the trace param in the URL (?trace=true), we'll get a stack trace in the response payload.
     include-stacktrace: on_param
     include-exception: false
-
 # 错误响应体是否展示异常栈
 reflector:
   trace: true
