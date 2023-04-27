@@ -11,9 +11,9 @@ import com.aochensoft.democommon.vo.auth.AccessTokenVo;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,25 +32,15 @@ import java.util.Objects;
  * @since 2023-02-15 11:35:26
  */
 @Service
+@RequiredArgsConstructor
 public class SysUserServiceImpl implements SysUserService {
 
     public static final String USER_NOT_EXIST = "用户不存在";
+
     private final SysUserRepository sysUserRepository;
-
-    private final PasswordEncoder passwordEncoder;
-
     private final JwtTokenProvider jwtTokenProvider;
-
+    private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-
-    @Autowired
-    public SysUserServiceImpl(SysUserRepository sysUserRepository, PasswordEncoder passwordEncoder,
-                              JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager) {
-        this.sysUserRepository = sysUserRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.authenticationManager = authenticationManager;
-    }
 
     @Override
     public SysUser loadUserById(Long userId) {

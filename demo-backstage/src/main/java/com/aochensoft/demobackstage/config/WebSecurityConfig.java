@@ -2,14 +2,13 @@ package com.aochensoft.demobackstage.config;
 
 import com.aochensoft.democommon.auth.CustomAuthenticationProvider;
 import com.aochensoft.democommon.auth.JwtAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -23,27 +22,11 @@ import java.util.Collections;
  */
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
     private final CustomAuthenticationProvider customAuthenticationProvider;
-
-    public WebSecurityConfig(@Lazy JwtAuthenticationFilter jwtAuthenticationFilter,
-                             @Lazy CustomAuthenticationProvider customAuthenticationProvider) {
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.customAuthenticationProvider = customAuthenticationProvider;
-    }
-
-    /**
-     * 密码加密
-     *
-     * @return BCryptPasswordEncoder
-     */
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 
     /**
      * 配置认证管理器

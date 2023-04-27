@@ -3,7 +3,10 @@ package com.aochensoft.democommon.auth;
 import com.aochensoft.democommon.entity.sys.SysUser;
 import com.aochensoft.democommon.exception.AochenGlobalException;
 import com.aochensoft.democommon.service.sys.SysUserService;
+import com.aochensoft.democommon.service.sys.impl.SysUserServiceImpl;
+import com.aochensoft.democommon.util.BeanUtil;
 import com.aochensoft.democommon.vo.auth.LoginUser;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -22,19 +25,14 @@ import java.time.LocalDateTime;
  * @since 2023-03-27 19:29:20
  */
 @Component
+@RequiredArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final SysUserService sysUserService;
-
-    public CustomAuthenticationProvider(PasswordEncoder passwordEncoder, SysUserService sysUserService) {
-        this.passwordEncoder = passwordEncoder;
-        this.sysUserService = sysUserService;
-    }
-
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        SysUserService sysUserService = BeanUtil.getBean(SysUserServiceImpl.class);
         String username = authentication.getName();
         String password = (String) authentication.getCredentials();
         SysUser user = sysUserService.findUserByUsername(username);
