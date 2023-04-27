@@ -8,6 +8,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -42,9 +44,17 @@ public class RedisServiceImpl implements RedisService {
         String s = redisTemplate.opsForValue().get(key);
         if (StringUtils.isNotBlank(s)) {
             return JSONUtil.toBean(s, clazz);
-        } else {
-            return null;
         }
+        return null;
+    }
+
+    @Override
+    public <T> List<T> getList(String key, Class<T> clazz) {
+        String s = redisTemplate.opsForValue().get(key);
+        if (StringUtils.isNotBlank(s)) {
+            return JSONUtil.toList(s, clazz);
+        }
+        return Collections.emptyList();
     }
 
     @Override

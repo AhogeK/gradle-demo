@@ -134,11 +134,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                       String message,
                                                       HttpStatusCode httpStatus,
                                                       WebRequest request) {
+        return ResponseEntity.status(httpStatus).body(buildErrorResponseBody(exception, message, httpStatus, request));
+    }
+
+    public ErrorResponse buildErrorResponseBody(Exception exception,
+                                                String message,
+                                                HttpStatusCode httpStatus,
+                                                WebRequest request) {
         ErrorResponse errorResponse = new ErrorResponse(httpStatus.value(), message);
         if (customReflectorProperties.isTrace() && isTraceOn(request)) {
             errorResponse.setStackTrace(ExceptionUtils.getStackTrace(exception));
         }
-        return ResponseEntity.status(httpStatus).body(errorResponse);
+        return errorResponse;
     }
 
     /**

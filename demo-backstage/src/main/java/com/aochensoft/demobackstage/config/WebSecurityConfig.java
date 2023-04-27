@@ -1,7 +1,6 @@
 package com.aochensoft.demobackstage.config;
 
 import com.aochensoft.democommon.auth.CustomAuthenticationProvider;
-import com.aochensoft.democommon.auth.JwtAuthenticationEntryPoint;
 import com.aochensoft.democommon.auth.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,16 +25,12 @@ import java.util.Collections;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private final CustomAuthenticationProvider customAuthenticationProvider;
 
-    public WebSecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-                             @Lazy JwtAuthenticationFilter jwtAuthenticationFilter,
+    public WebSecurityConfig(@Lazy JwtAuthenticationFilter jwtAuthenticationFilter,
                              @Lazy CustomAuthenticationProvider customAuthenticationProvider) {
-        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.customAuthenticationProvider = customAuthenticationProvider;
     }
@@ -71,16 +66,12 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .anyRequest().permitAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authenticationProvider(customAuthenticationProvider)
-                // 关闭CSRF
                 .csrf().disable()
         ;
         return http.build();

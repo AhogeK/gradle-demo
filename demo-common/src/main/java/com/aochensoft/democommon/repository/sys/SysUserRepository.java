@@ -37,4 +37,36 @@ public interface SysUserRepository extends CrudRepository<SysUser, Long> {
      * @return 用户
      */
     Optional<SysUser> findByUsernameOrEmail(String username, String email);
+
+    /**
+     * 根据昵称查询用户数量
+     *
+     * @param nickname 昵称
+     * @return 用户
+     */
+    Optional<Integer> countByNickname(String nickname);
+
+    /**
+     * 根据邮箱查询用户数量
+     *
+     * @param email 邮箱
+     * @return 用户
+     */
+    Optional<Integer> countByEmail(String email);
+
+    /**
+     * 根据用户名查询用户数量
+     *
+     * @param username 用户名
+     * @return 用户
+     */
+    Optional<Integer> countByUsername(String username);
+
+    /**
+     * 根据手机号码查询用户数量
+     *
+     * @param mobileNum 手机号码
+     * @return 用户
+     */
+    Optional<Integer> countByMobileNum(String mobileNum);
 }

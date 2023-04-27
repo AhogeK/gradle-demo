@@ -1,5 +1,6 @@
 package com.aochensoft.democommon.service.cache;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -46,6 +47,17 @@ public interface RedisService {
      * @return 值
      */
     <T> T get(String key, Class<T> clazz);
+
+
+    /**
+     * 获取列表的 redis 缓存
+     *
+     * @param key   键
+     * @param clazz 值类型
+     * @param <T>   值类型
+     * @return 列表类型的值
+     */
+    <T> List<T> getList(String key, Class<T> clazz);
 
     /**
      * 删除 redis 缓存

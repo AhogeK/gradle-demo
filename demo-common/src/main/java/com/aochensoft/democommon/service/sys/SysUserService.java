@@ -1,8 +1,9 @@
 package com.aochensoft.democommon.service.sys;
 
 import com.aochensoft.democommon.dto.auth.SignInRequest;
-import com.aochensoft.democommon.dto.auth.SignUpRequest;
+import com.aochensoft.democommon.dto.auth.SignupDto;
 import com.aochensoft.democommon.entity.sys.SysUser;
+import com.aochensoft.democommon.vo.auth.AccessTokenVo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -25,9 +26,10 @@ public interface SysUserService {
     /**
      * 注册用户
      *
-     * @param signUpRequest 注册信息
+     * @param signupDto 注册信息
+     * @return access token
      */
-    void registerUser(SignUpRequest signUpRequest);
+    AccessTokenVo registerUser(SignupDto signupDto);
 
     /**
      * 登录
@@ -43,4 +45,19 @@ public interface SysUserService {
      * @return 用户实体
      */
     SysUser findUserByUsernameOrEmail(String username);
+
+    /**
+     * 根据用户名查询用户
+     *
+     * @param username 用户名
+     * @return 用户实体
+     */
+    SysUser findUserByUsername(String username);
+
+    /**
+     * 根据id更新用户实体
+     *
+     * @param user 用户实体
+     */
+    void updateById(SysUser user);
 }

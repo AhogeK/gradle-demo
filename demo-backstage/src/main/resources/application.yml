@@ -42,3 +42,10 @@ reflector:
 app:
   jwtSecret: 'YW9jaGVuOmdyYWRsZS1kZW1v'
   jwtExpirationMs: 86400000
+  ignoredPatterns: >
+    .*/doc\\.html,
+    .*/static/.*,
+    .*/swagger-\\.html,
+    .*/swagger-.*,
+    .*/webjars/.*,
+    .*/api-docs.*

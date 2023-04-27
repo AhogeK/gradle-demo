@@ -1,9 +1,10 @@
 package com.aochensoft.democommon.auth;
 
+import cn.hutool.json.JSONUtil;
 import com.aochensoft.democommon.constant.RedisPrefixEnum;
-import com.aochensoft.democommon.entity.sys.SysUser;
 import com.aochensoft.democommon.exception.AochenGlobalException;
 import com.aochensoft.democommon.service.cache.RedisService;
+import com.aochensoft.democommon.vo.auth.LoginUser;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.*;
@@ -12,10 +13,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 
 /**
  * JWT TOKEN 提供者
@@ -43,14 +46,21 @@ public class JwtTokenProvider {
      * @return JWT TOKEN
      */
     public String generateToken(Authentication authentication) {
-        SysUser userPrincipal = (SysUser) authentication.getPrincipal();
+        LoginUser userPrincipal = (LoginUser) authentication.getPrincipal();
 
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime expiryDate = now.plusNanos(jwtExpirationMs);
 
         Algorithm algorithm = Algorithm.HMAC512(jwtSecret);
-        return JWT.create().withIssuer("AhogeK").withSubject(userPrincipal.getId().toString())
+        String jwt = JWT.create().withIssuer("AhogeK").withSubject(userPrincipal.getId().toString())
                 .withExpiresAt(expiryDate.atZone(ZoneId.systemDefault()).toInstant()).sign(algorithm);
+        // 将 jwt 及用户信息存入 redis (带 redis prefix)
+        redisService.set(RedisPrefixEnum.JWT_TOKEN.getPrefix() + jwt, JSONUtil.toJsonStr(userPrincipal),
+                jwtExpirationMs);
+        // 将用户权限存入 redis
+        redisService.set(RedisPrefixEnum.USER_AUTHORITY.getPrefix() + jwt,
+                JSONUtil.toJsonStr(authentication.getAuthorities()), jwtExpirationMs);
+        return jwt;
     }
 
     /**
@@ -59,8 +69,12 @@ public class JwtTokenProvider {
      * @param token JWT TOKEN
      * @return 用户信息
      */
-    public SysUser getLoginUserFromJWT(String token) {
-        return redisService.get(RedisPrefixEnum.JWT_TOKEN.getPrefix() + token, SysUser.class);
+    public LoginUser getLoginUserFromJWT(String token) {
+        return redisService.get(RedisPrefixEnum.JWT_TOKEN.getPrefix() + token, LoginUser.class);
+    }
+
+    public List<GrantedAuthority> getGrantedAuthorities(String jwt) {
+        return redisService.getList(RedisPrefixEnum.USER_AUTHORITY.getPrefix() + jwt, GrantedAuthority.class);
     }
 
     /**

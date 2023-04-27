@@ -26,9 +26,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @Entity
 @AllArgsConstructor
+@SuppressWarnings("java:S1948")
 @SQLDelete(sql = "UPDATE sys_user SET is_deleted = 1 WHERE id = ?")
 @Where(clause = "is_deleted = 0")
 public class SysUser implements UserDetails {
+
     @Id
     @GenericGenerator(name = "custom_gen", strategy = "com.aochensoft.democommon.config.CustomIdGenerator")
     @GeneratedValue(generator = "custom_gen")
@@ -38,6 +40,11 @@ public class SysUser implements UserDetails {
      * 用户名称
      */
     private String username;
+
+    /**
+     * 昵称
+     */
+    private String nickname;
 
     /**
      * 密码
@@ -89,7 +96,7 @@ public class SysUser implements UserDetails {
     /**
      * 角色
      */
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "sys_user_role",
             joinColumns = {@JoinColumn(name = "user_id")},
@@ -106,8 +113,10 @@ public class SysUser implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // 将每个角色转换为SimpleGrantedAuthority对象，并添加到集合中
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for (SysRole role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role.getCode()));
+        if (roles != null) {
+            for (SysRole role : roles) {
+                authorities.add(new SimpleGrantedAuthority(role.getCode()));
+            }
         }
         return authorities;
     }
