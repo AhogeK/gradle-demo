@@ -55,10 +55,10 @@ public class JwtTokenProvider {
         String jwt = JWT.create().withIssuer("AhogeK").withSubject(userPrincipal.getId().toString())
                 .withExpiresAt(expiryDate.atZone(ZoneId.systemDefault()).toInstant()).sign(algorithm);
         // 将 jwt 及用户信息存入 redis (带 redis prefix)
-        redisService.set(RedisPrefixEnum.JWT_TOKEN.getPrefix() + jwt, JSONUtil.toJsonStr(userPrincipal),
+        redisService.set(RedisPrefixEnum.JWT_TOKEN.getPrefix() + userPrincipal.getId(), JSONUtil.toJsonStr(userPrincipal),
                 jwtExpirationMs);
         // 将用户权限存入 redis
-        redisService.set(RedisPrefixEnum.USER_AUTHORITY.getPrefix() + jwt,
+        redisService.set(RedisPrefixEnum.USER_AUTHORITY.getPrefix() + userPrincipal.getId(),
                 JSONUtil.toJsonStr(authentication.getAuthorities()), jwtExpirationMs);
         return jwt;
     }
@@ -70,7 +70,8 @@ public class JwtTokenProvider {
      * @return 用户信息
      */
     public LoginUser getLoginUserFromJWT(String token) {
-        return redisService.get(RedisPrefixEnum.JWT_TOKEN.getPrefix() + token, LoginUser.class);
+        Long userId = getUserIdFromJWT(token);
+        return redisService.get(RedisPrefixEnum.JWT_TOKEN.getPrefix() + userId, LoginUser.class);
     }
 
     public List<GrantedAuthority> getGrantedAuthorities(String jwt) {
