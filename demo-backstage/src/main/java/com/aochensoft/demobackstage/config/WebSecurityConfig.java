@@ -57,11 +57,15 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * 配置 CSRF Token 存储在 Cookie 中
+     *
+     * @return CookieCsrfTokenRepository
+     */
     @Bean
     public CookieCsrfTokenRepository csrfTokenRepository() {
         var repository = new CookieCsrfTokenRepository();
         repository.setCookiePath("/");              // 设置 CSRF Token 存储在 Cookie 中的路径
-        repository.setCookieDomain("127.0.0.1");    // 设置 CSRF Token 存储在 Cookie 中的域名
         repository.setCookieMaxAge(3600);           // 设置 CSRF Token 存储在 Cookie 中的最大寿命（单位为秒）
         repository.setSecure(true);                 // 设置 CSRF Token 存储在 Cookie 中是否为安全 Cookie
         return repository;

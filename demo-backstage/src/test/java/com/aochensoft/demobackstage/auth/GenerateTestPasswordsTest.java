@@ -15,7 +15,7 @@ class GenerateTestPasswordsTest {
 
     @Test
     void generatePassword() {
-        String password = "111111";
+        String password = "aochensoft";
         Digester sha256 = new Digester(DigestAlgorithm.SHA256);
         String encryptPassword = sha256.digestHex(password);
         Assertions.assertNotNull(encryptPassword);

@@ -23,6 +23,7 @@ import java.time.ZoneId;
 @Getter
 @Component
 public class JwtTokenProvider {
+
     @Value("${app.jwtSecret}")
     private String jwtSecret;
 

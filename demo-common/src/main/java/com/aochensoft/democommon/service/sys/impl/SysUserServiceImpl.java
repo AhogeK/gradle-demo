@@ -109,6 +109,7 @@ public class SysUserServiceImpl implements SysUserService {
         csrfCookie.setHttpOnly(true);
         csrfCookie.setMaxAge(jwtTokenProvider.getJwtExpirationMs() / 1000);
         csrfCookie.setPath("/");
+        csrfCookie.setSecure(true);
         response.addCookie(csrfCookie);
     }
 
