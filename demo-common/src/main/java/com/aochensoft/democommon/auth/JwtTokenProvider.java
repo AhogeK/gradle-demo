@@ -60,7 +60,7 @@ public class JwtTokenProvider {
                 jwtExpirationMs);
 
         // 将用户权限存入 redis
-        redisService.set(RedisPrefixEnum.USER_AUTHORITY.getPrefix() + userPrincipal.getId(),
+        redisService.set(RedisPrefixEnum.USER_AUTHORITY.getPrefix() + jwt,
                 JSONUtil.toJsonStr(authentication.getAuthorities()), jwtExpirationMs);
         return jwt;
     }
@@ -82,8 +82,7 @@ public class JwtTokenProvider {
      * @return 用户权限
      */
     public Collection<SimpleGrantedAuthority> getGrantedAuthorities(String token) {
-        Long userId = getUserIdFromJWT(token);
-        return redisService.getList(RedisPrefixEnum.USER_AUTHORITY.getPrefix() + userId, SimpleGrantedAuthority.class);
+        return redisService.getList(RedisPrefixEnum.USER_AUTHORITY.getPrefix() + token, SimpleGrantedAuthority.class);
     }
 
     /**
