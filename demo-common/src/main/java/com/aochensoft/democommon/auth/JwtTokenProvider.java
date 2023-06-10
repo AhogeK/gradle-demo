@@ -49,14 +49,16 @@ public class JwtTokenProvider {
         LoginUser userPrincipal = (LoginUser) authentication.getPrincipal();
 
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime expiryDate = now.plusNanos(jwtExpirationMs);
+        LocalDateTime expiryDate = now.plusNanos(jwtExpirationMs * 1_000_000L);
 
         Algorithm algorithm = Algorithm.HMAC512(jwtSecret);
         String jwt = JWT.create().withIssuer("AhogeK").withSubject(userPrincipal.getId().toString())
                 .withExpiresAt(expiryDate.atZone(ZoneId.systemDefault()).toInstant()).sign(algorithm);
+
         // 将 jwt 及用户信息存入 redis (带 redis prefix)
-        redisService.set(RedisPrefixEnum.JWT_TOKEN.getPrefix() + userPrincipal.getId(), JSONUtil.toJsonStr(userPrincipal),
+        redisService.set(RedisPrefixEnum.JWT_TOKEN.getPrefix() + jwt, JSONUtil.toJsonStr(userPrincipal),
                 jwtExpirationMs);
+
         // 将用户权限存入 redis
         redisService.set(RedisPrefixEnum.USER_AUTHORITY.getPrefix() + userPrincipal.getId(),
                 JSONUtil.toJsonStr(authentication.getAuthorities()), jwtExpirationMs);
@@ -70,8 +72,7 @@ public class JwtTokenProvider {
      * @return 用户信息
      */
     public LoginUser getLoginUserFromJWT(String token) {
-        Long userId = getUserIdFromJWT(token);
-        return redisService.get(RedisPrefixEnum.JWT_TOKEN.getPrefix() + userId, LoginUser.class);
+        return redisService.get(RedisPrefixEnum.JWT_TOKEN.getPrefix() + token, LoginUser.class);
     }
 
     /**

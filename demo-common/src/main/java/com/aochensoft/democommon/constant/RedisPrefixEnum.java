@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 public enum RedisPrefixEnum {
 
     JWT_TOKEN("jwt_token:"),
+
     USER_AUTHORITY("user_authority:"),
     ;
 
